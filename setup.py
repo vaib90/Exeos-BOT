@@ -3,7 +3,9 @@ from datetime import datetime
 from colorama import *
 import asyncio, random, json, uuid, os, pytz
 
-wib = pytz.timezone('Asia/Jakarta')
+init()
+
+wib = pytz.timezone('Asia/Ho_Chi_Minh')
 
 USER_AGENT = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.91 Safari/537.36",
@@ -43,7 +45,7 @@ USER_AGENT = [
 class Exeos:
     def __init__(self) -> None:
         self.BASE_API = "https://api.exeos.network"
-        self.REF_CODE = "REFZ26PQGAF" # U can change it with yours
+        self.REF_CODE = "REF4VEVZRFI"
         self.HEADERS = {}
         self.proxies = []
         self.proxy_index = 0
@@ -58,18 +60,15 @@ class Exeos:
 
     def log(self, message):
         print(
-            f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
-            f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}{message}",
+            f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL} "
+            f"{Fore.WHITE + Style.BRIGHT}| {Style.RESET_ALL}{message}",
             flush=True
         )
 
     def welcome(self):
         print(
             f"""
-        {Fore.GREEN + Style.BRIGHT}Exeos {Fore.BLUE + Style.BRIGHT}Auto BOT
-            """
-            f"""
-        {Fore.GREEN + Style.BRIGHT}Rey? {Fore.YELLOW + Style.BRIGHT}<INI WATERMARK>
+        {Fore.GREEN + Style.BRIGHT}Exeos {Fore.BLUE + Style.BRIGHT}Bot Tự Động
             """
         )
 
@@ -82,7 +81,7 @@ class Exeos:
         filename = "accounts.json"
         try:
             if not os.path.exists(filename):
-                self.log(f"{Fore.RED}File {filename} Not Found.{Style.RESET_ALL}")
+                self.log(f"{Fore.RED + Style.BRIGHT}Không tìm thấy file {filename}.{Style.RESET_ALL}")
                 return
 
             with open(filename, 'r') as file:
@@ -115,7 +114,6 @@ class Exeos:
                 for existing_node in existing_nodes:
                     if existing_node["Email"] == email:
                         found = True
-
                         existing_node["Token"] = token
 
                         if not existing_node.get("Nodes"):
@@ -133,11 +131,11 @@ class Exeos:
             with open(filename, 'w') as file:
                 json.dump(existing_nodes, file, indent=4)
 
-            self.log(f"{Fore.GREEN + Style.BRIGHT}Nodes Data Have Been Saved Successfully{Style.RESET_ALL}")
+            self.log(f"{Fore.GREEN + Style.BRIGHT}Dữ liệu node đã được lưu thành công{Style.RESET_ALL}")
         except Exception as e:
             self.log(
-                f"{Fore.RED+Style.BRIGHT}Save Nodes Failed:{Style.RESET_ALL}"
-                f"{Fore.YELLOW+Style.BRIGHT} {str(e)} {Style.RESET_ALL}"
+                f"{Fore.RED + Style.BRIGHT}Lưu node thất bại:{Style.RESET_ALL} "
+                f"{Fore.YELLOW + Style.BRIGHT}{str(e)}{Style.RESET_ALL}"
             )
             return []
     
@@ -153,22 +151,22 @@ class Exeos:
                 self.proxies = [line.strip() for line in content.splitlines() if line.strip()]
             else:
                 if not os.path.exists(filename):
-                    self.log(f"{Fore.RED + Style.BRIGHT}File {filename} Not Found.{Style.RESET_ALL}")
+                    self.log(f"{Fore.RED + Style.BRIGHT}Không tìm thấy file {filename}.{Style.RESET_ALL}")
                     return
                 with open(filename, 'r') as f:
                     self.proxies = [line.strip() for line in f.read().splitlines() if line.strip()]
             
             if not self.proxies:
-                self.log(f"{Fore.RED + Style.BRIGHT}No Proxies Found.{Style.RESET_ALL}")
+                self.log(f"{Fore.RED + Style.BRIGHT}Không tìm thấy proxy.{Style.RESET_ALL}")
                 return
 
             self.log(
-                f"{Fore.GREEN + Style.BRIGHT}Proxies Total  : {Style.RESET_ALL}"
+                f"{Fore.GREEN + Style.BRIGHT}Tổng số proxy: {Style.RESET_ALL}"
                 f"{Fore.WHITE + Style.BRIGHT}{len(self.proxies)}{Style.RESET_ALL}"
             )
         
         except Exception as e:
-            self.log(f"{Fore.RED + Style.BRIGHT}Failed To Load Proxies: {e}{Style.RESET_ALL}")
+            self.log(f"{Fore.RED + Style.BRIGHT}Tải proxy thất bại: {e}{Style.RESET_ALL}")
             self.proxies = []
 
     def check_proxy_schemes(self, proxies):
@@ -207,88 +205,87 @@ class Exeos:
     def print_question(self):
         while True:
             try:
-                print(f"{Fore.WHITE + Style.BRIGHT}1. Create New Nodes{Style.RESET_ALL}")
-                print(f"{Fore.WHITE + Style.BRIGHT}2. Retrieve Exiting Nodes{Style.RESET_ALL}")
-                option = int(input(f"{Fore.BLUE + Style.BRIGHT}Choose [1/2] -> {Style.RESET_ALL}").strip())
+                print(f"{Fore.WHITE + Style.BRIGHT}1. Tạo node mới{Style.RESET_ALL}")
+                print(f"{Fore.WHITE + Style.BRIGHT}2. Lấy node hiện có{Style.RESET_ALL}")
+                option = int(input(f"{Fore.BLUE + Style.BRIGHT}Chọn [1/2] -> {Style.RESET_ALL}").strip())
 
                 if option in [1, 2]:
-                    option_type = "Create New" if option == 1 else "Retrieve Exiting"
-                    print(f"{Fore.GREEN + Style.BRIGHT}{option_type} Nodes Selected.{Style.RESET_ALL}")
+                    option_type = "Tạo mới" if option == 1 else "Lấy hiện có"
+                    print(f"{Fore.GREEN + Style.BRIGHT}Đã chọn {option_type} node.{Style.RESET_ALL}")
                     break
                 else:
-                    print(f"{Fore.RED+Style.BRIGHT}Please enter either 1 or 2.{Style.RESET_ALL}")
+                    print(f"{Fore.RED + Style.BRIGHT}Vui lòng nhập 1 hoặc 2.{Style.RESET_ALL}")
             except ValueError:
-                print(f"{Fore.RED+Style.BRIGHT}Invalid input. Enter a number (1 or 2).{Style.RESET_ALL}")
+                print(f"{Fore.RED + Style.BRIGHT}Đầu vào không hợp lệ. Vui lòng nhập số (1 hoặc 2).{Style.RESET_ALL}")
 
         if option == 1:
             while True:
                 try:
-                    count = int(input(f"{Fore.YELLOW + Style.BRIGHT}How Many Nodes Do You Want to Create For Each Account? -> {Style.RESET_ALL}").strip())
+                    count = int(input(f"{Fore.YELLOW + Style.BRIGHT}Bạn muốn tạo bao nhiêu node cho mỗi tài khoản? -> {Style.RESET_ALL}").strip())
                     if count > 0:
                         self.nodes_count = count
                         break
                     else:
-                        print(f"{Fore.RED+Style.BRIGHT}Please enter a positive number.{Style.RESET_ALL}")
+                        print(f"{Fore.RED + Style.BRIGHT}Vui lòng nhập số dương.{Style.RESET_ALL}")
                 except ValueError:
-                    print(f"{Fore.RED+Style.BRIGHT}Invalid input. Enter a number.{Style.RESET_ALL}")
+                    print(f"{Fore.RED + Style.BRIGHT}Đầu vào không hợp lệ. Vui lòng nhập số.{Style.RESET_ALL}")
 
         while True:
             try:
-                print(f"{Fore.WHITE + Style.BRIGHT}1. Run With Free Proxyscrape Proxy{Style.RESET_ALL}")
-                print(f"{Fore.WHITE + Style.BRIGHT}2. Run With Private Proxy{Style.RESET_ALL}")
-                print(f"{Fore.WHITE + Style.BRIGHT}3. Run Without Proxy{Style.RESET_ALL}")
-                choose = int(input(f"{Fore.BLUE + Style.BRIGHT}Choose [1/2/3] -> {Style.RESET_ALL}").strip())
+                print(f"{Fore.WHITE + Style.BRIGHT}1. Chạy với proxy miễn phí Proxyscrape{Style.RESET_ALL}")
+                print(f"{Fore.WHITE + Style.BRIGHT}2. Chạy với proxy riêng{Style.RESET_ALL}")
+                print(f"{Fore.WHITE + Style.BRIGHT}3. Chạy không dùng proxy{Style.RESET_ALL}")
+                choose = int(input(f"{Fore.BLUE + Style.BRIGHT}Chọn [1/2/3] -> {Style.RESET_ALL}").strip())
 
                 if choose in [1, 2, 3]:
                     proxy_type = (
-                        "With Free Proxyscrape" if choose == 1 else 
-                        "With Private" if choose == 2 else 
-                        "Without"
+                        "với proxy miễn phí Proxyscrape" if choose == 1 else 
+                        "với proxy riêng" if choose == 2 else 
+                        "không dùng proxy"
                     )
-                    print(f"{Fore.GREEN + Style.BRIGHT}Run {proxy_type} Proxy Selected.{Style.RESET_ALL}")
+                    print(f"{Fore.GREEN + Style.BRIGHT}Đã chọn chạy {proxy_type}.{Style.RESET_ALL}")
                     break
                 else:
-                    print(f"{Fore.RED + Style.BRIGHT}Please enter either 1, 2 or 3.{Style.RESET_ALL}")
+                    print(f"{Fore.RED + Style.BRIGHT}Vui lòng nhập 1, 2 hoặc 3.{Style.RESET_ALL}")
             except ValueError:
-                print(f"{Fore.RED + Style.BRIGHT}Invalid input. Enter a number (1, 2 or 3).{Style.RESET_ALL}")
+                print(f"{Fore.RED + Style.BRIGHT}Đầu vào không hợp lệ. Vui lòng nhập số (1, 2 hoặc 3).{Style.RESET_ALL}")
 
         rotate = False
         if choose in [1, 2]:
             while True:
-                rotate = input(f"{Fore.BLUE + Style.BRIGHT}Rotate Invalid Proxy? [y/n] -> {Style.RESET_ALL}").strip()
-
+                rotate = input(f"{Fore.BLUE + Style.BRIGHT}Xoay proxy không hợp lệ? [y/n] -> {Style.RESET_ALL}").strip()
                 if rotate in ["y", "n"]:
                     rotate = rotate == "y"
                     break
                 else:
-                    print(f"{Fore.RED + Style.BRIGHT}Invalid input. Enter 'y' or 'n'.{Style.RESET_ALL}")
+                    print(f"{Fore.RED + Style.BRIGHT}Đầu vào không hợp lệ. Vui lòng nhập 'y' hoặc 'n'.{Style.RESET_ALL}")
 
         return option, choose, rotate
     
     async def check_connection(self, proxy=None):
         url = "https://api.ipify.org?format=json"
-        proxies = {"http":proxy, "https":proxy} if proxy else None
+        proxies = {"http": proxy, "https": proxy} if proxy else None
         try:
             response = await asyncio.to_thread(requests.get, url=url, proxies=proxies, timeout=30, impersonate="chrome110", verify=False)
             response.raise_for_status()
             return True
         except Exception as e:
             self.log(
-                f"{Fore.CYAN + Style.BRIGHT}Status :{Style.RESET_ALL}"
-                f"{Fore.RED + Style.BRIGHT} Connection Not 200 OK {Style.RESET_ALL}"
-                f"{Fore.MAGENTA + Style.BRIGHT}-{Style.RESET_ALL}"
-                f"{Fore.YELLOW + Style.BRIGHT} {str(e)} {Style.RESET_ALL}"
+                f"{Fore.CYAN + Style.BRIGHT}Trạng thái:{Style.RESET_ALL} "
+                f"{Fore.RED + Style.BRIGHT}Kết nối không thành công{Style.RESET_ALL} "
+                f"{Fore.MAGENTA + Style.BRIGHT}-{Style.RESET_ALL} "
+                f"{Fore.YELLOW + Style.BRIGHT}{str(e)}{Style.RESET_ALL}"
             )
             return None
     
     async def email_login(self, email: str, password: str, proxy=None, retries=5):
         url = f"{self.BASE_API}/auth/web/email/login"
-        data = json.dumps({"email":email, "password":password, "referralCode":self.REF_CODE})
+        data = json.dumps({"email": email, "password": password, "referralCode": self.REF_CODE})
         headers = self.HEADERS[email].copy()
         headers["Content-Length"] = str(len(data))
         headers["Content-Type"] = "application/json"
         for attempt in range(retries):
-            proxies = {"http":proxy, "https":proxy} if proxy else None
+            proxies = {"http": proxy, "https": proxy} if proxy else None
             try:
                 response = await asyncio.to_thread(requests.post, url=url, headers=headers, data=data, proxies=proxies, timeout=60, impersonate="chrome110", verify=False)
                 response.raise_for_status()
@@ -298,10 +295,10 @@ class Exeos:
                     await asyncio.sleep(5)
                     continue
                 self.log(
-                    f"{Fore.CYAN+Style.BRIGHT}Status :{Style.RESET_ALL}"
-                    f"{Fore.RED+Style.BRIGHT} Login Failed {Style.RESET_ALL}"
-                    f"{Fore.MAGENTA+Style.BRIGHT}-{Style.RESET_ALL}"
-                    f"{Fore.YELLOW+Style.BRIGHT} {str(e)} {Style.RESET_ALL}"
+                    f"{Fore.CYAN + Style.BRIGHT}Trạng thái:{Style.RESET_ALL} "
+                    f"{Fore.RED + Style.BRIGHT}Đăng nhập thất bại{Style.RESET_ALL} "
+                    f"{Fore.MAGENTA + Style.BRIGHT}-{Style.RESET_ALL} "
+                    f"{Fore.YELLOW + Style.BRIGHT}{str(e)}{Style.RESET_ALL}"
                 )
                 return None
             
@@ -310,7 +307,7 @@ class Exeos:
         headers = self.HEADERS[email].copy()
         headers["Authorization"] = f"Bearer {self.access_tokens[email]}"
         for attempt in range(retries):
-            proxies = {"http":proxy, "https":proxy} if proxy else None
+            proxies = {"http": proxy, "https": proxy} if proxy else None
             try:
                 response = await asyncio.to_thread(requests.get, url=url, headers=headers, proxies=proxies, timeout=60, impersonate="chrome110", verify=False)
                 response.raise_for_status()
@@ -320,10 +317,10 @@ class Exeos:
                     await asyncio.sleep(5)
                     continue
                 self.log(
-                    f"{Fore.CYAN+Style.BRIGHT}Error  :{Style.RESET_ALL}"
-                    f"{Fore.RED+Style.BRIGHT} GET Exiting Node Ids Failed {Style.RESET_ALL}"
-                    f"{Fore.MAGENTA+Style.BRIGHT}-{Style.RESET_ALL}"
-                    f"{Fore.YELLOW+Style.BRIGHT} {str(e)} {Style.RESET_ALL}"
+                    f"{Fore.CYAN + Style.BRIGHT}Lỗi:{Style.RESET_ALL} "
+                    f"{Fore.RED + Style.BRIGHT}Lấy danh sách node hiện có thất bại{Style.RESET_ALL} "
+                    f"{Fore.MAGENTA + Style.BRIGHT}-{Style.RESET_ALL} "
+                    f"{Fore.YELLOW + Style.BRIGHT}{str(e)}{Style.RESET_ALL}"
                 )
                 return None
             
@@ -331,8 +328,8 @@ class Exeos:
         while True:
             proxy = self.get_next_proxy_for_account(email) if use_proxy else None
             self.log(
-                f"{Fore.CYAN+Style.BRIGHT}Proxy  :{Style.RESET_ALL}"
-                f"{Fore.WHITE+Style.BRIGHT} {proxy} {Style.RESET_ALL}"
+                f"{Fore.CYAN + Style.BRIGHT}Proxy:{Style.RESET_ALL} "
+                f"{Fore.WHITE + Style.BRIGHT}{proxy}{Style.RESET_ALL}"
             )
 
             is_valid = await self.check_connection(proxy)
@@ -356,18 +353,18 @@ class Exeos:
                 self.access_tokens[email] = login["data"]["token"]
 
                 self.log(
-                    f"{Fore.CYAN + Style.BRIGHT}Status :{Style.RESET_ALL}"
-                    f"{Fore.GREEN + Style.BRIGHT} Login Success {Style.RESET_ALL}"
+                    f"{Fore.CYAN + Style.BRIGHT}Trạng thái:{Style.RESET_ALL} "
+                    f"{Fore.GREEN + Style.BRIGHT}Đăng nhập thành công{Style.RESET_ALL}"
                 )
                 return True
             
             elif login and login.get("status") == "fail":
-                err_msg = login.get("error", "Unknown Error")
+                err_msg = login.get("error", "Lỗi không xác định")
                 self.log(
-                    f"{Fore.CYAN + Style.BRIGHT}Status :{Style.RESET_ALL}"
-                    f"{Fore.RED + Style.BRIGHT} Login Failed {Style.RESET_ALL}"
-                    f"{Fore.MAGENTA + Style.BRIGHT}-{Style.RESET_ALL}"
-                    f"{Fore.YELLOW + Style.BRIGHT} {err_msg} {Style.RESET_ALL}"
+                    f"{Fore.CYAN + Style.BRIGHT}Trạng thái:{Style.RESET_ALL} "
+                    f"{Fore.RED + Style.BRIGHT}Đăng nhập thất bại{Style.RESET_ALL} "
+                    f"{Fore.MAGENTA + Style.BRIGHT}-{Style.RESET_ALL} "
+                    f"{Fore.YELLOW + Style.BRIGHT}{err_msg}{Style.RESET_ALL}"
                 )
 
             return False
@@ -381,19 +378,19 @@ class Exeos:
 
             if isinstance(exciting_nodes, list) and len(exciting_nodes) == 0:
                 self.log(
-                    f"{Fore.CYAN + Style.BRIGHT}Nodes  :{Style.RESET_ALL}"
-                    f"{Fore.RED + Style.BRIGHT} No Node Ids Found {Style.RESET_ALL}"
+                    f"{Fore.CYAN + Style.BRIGHT}Node:{Style.RESET_ALL} "
+                    f"{Fore.RED + Style.BRIGHT}Không tìm thấy node nào{Style.RESET_ALL}"
                 )
                 return self.node_datas
 
             for node in exciting_nodes:
                 node_id = node["nodeId"]
-                self.node_datas.append({"nodeId":node_id})
+                self.node_datas.append({"nodeId": node_id})
 
             self.log(
-                f"{Fore.CYAN + Style.BRIGHT}Nodes  :{Style.RESET_ALL}"
-                f"{Fore.GREEN + Style.BRIGHT} You Have {Style.RESET_ALL}"
-                f"{Fore.WHITE + Style.BRIGHT}{len(exciting_nodes)} Node Ids{Style.RESET_ALL}"
+                f"{Fore.CYAN + Style.BRIGHT}Node:{Style.RESET_ALL} "
+                f"{Fore.GREEN + Style.BRIGHT}Bạn có {Style.RESET_ALL}"
+                f"{Fore.WHITE + Style.BRIGHT}{len(exciting_nodes)} node{Style.RESET_ALL}"
             )
             return self.node_datas
 
@@ -402,34 +399,32 @@ class Exeos:
     async def process_create_new_nodes(self):
         for i in range(self.nodes_count):
             node_id = self.generate_node_id()
-            self.node_datas.append({"nodeId":node_id})
+            self.node_datas.append({"nodeId": node_id})
 
         self.log(
-            f"{Fore.CYAN + Style.BRIGHT}Nodes  :{Style.RESET_ALL}"
-            f"{Fore.WHITE + Style.BRIGHT} {self.nodes_count} Node Ids {Style.RESET_ALL}"
-            f"{Fore.GREEN + Style.BRIGHT}Have Been Created Successfully{Style.RESET_ALL}"
+            f"{Fore.CYAN + Style.BRIGHT}Node:{Style.RESET_ALL} "
+            f"{Fore.WHITE + Style.BRIGHT}{self.nodes_count} node {Style.RESET_ALL}"
+            f"{Fore.GREEN + Style.BRIGHT}đã được tạo thành công{Style.RESET_ALL}"
         )
         return self.node_datas
 
     async def process_accounts(self, email: str, password: str, option: int, use_proxy: bool, rotate_proxy: bool):
         logined = await self.process_user_login(email, password, use_proxy, rotate_proxy)
         if logined:
-
             if option == 1:
                 node_datas = await self.process_create_new_nodes()
-                self.user_nodes.append({"Email":email, "Token":self.access_tokens[email], "Nodes":node_datas})
+                self.user_nodes.append({"Email": email, "Token": self.access_tokens[email], "Nodes": node_datas})
                 self.save_nodes(self.user_nodes)
-
             elif option == 2:
                 node_datas = await self.process_get_exiting_nodes(email, use_proxy)
-                self.user_nodes.append({"Email":email, "Token":self.access_tokens[email], "Nodes":node_datas})
+                self.user_nodes.append({"Email": email, "Token": self.access_tokens[email], "Nodes": node_datas})
                 self.save_nodes(self.user_nodes)
 
     async def main(self):
         try:
             accounts = self.load_accounts()
             if not accounts:
-                self.log(f"{Fore.RED+Style.BRIGHT}No Accounts Loaded.{Style.RESET_ALL}")
+                self.log(f"{Fore.RED + Style.BRIGHT}Không tải được tài khoản nào.{Style.RESET_ALL}")
                 return
 
             option, proxy_choice, rotate_proxy = self.print_question()
@@ -441,7 +436,7 @@ class Exeos:
             self.clear_terminal()
             self.welcome()
             self.log(
-                f"{Fore.GREEN + Style.BRIGHT}Account's Total: {Style.RESET_ALL}"
+                f"{Fore.GREEN + Style.BRIGHT}Tổng số tài khoản: {Style.RESET_ALL}"
                 f"{Fore.WHITE + Style.BRIGHT}{len(accounts)}{Style.RESET_ALL}"
             )
 
@@ -456,21 +451,21 @@ class Exeos:
                     self.log(
                         f"{Fore.CYAN + Style.BRIGHT}{separator}[{Style.RESET_ALL}"
                         f"{Fore.WHITE + Style.BRIGHT} {idx} {Style.RESET_ALL}"
-                        f"{Fore.CYAN + Style.BRIGHT}Of{Style.RESET_ALL}"
+                        f"{Fore.CYAN + Style.BRIGHT}trong{Style.RESET_ALL}"
                         f"{Fore.WHITE + Style.BRIGHT} {len(accounts)} {Style.RESET_ALL}"
                         f"{Fore.CYAN + Style.BRIGHT}]{separator}{Style.RESET_ALL}"
                     )
 
                     if not "@" in email or not password:
                         self.log(
-                            f"{Fore.CYAN+Style.BRIGHT}Status :{Style.RESET_ALL}"
-                            f"{Fore.RED+Style.BRIGHT} Invalid Account Data {Style.RESET_ALL}"
+                            f"{Fore.CYAN + Style.BRIGHT}Trạng thái:{Style.RESET_ALL} "
+                            f"{Fore.RED + Style.BRIGHT}Dữ liệu tài khoản không hợp lệ{Style.RESET_ALL}"
                         )
                         continue
 
                     self.HEADERS[email] = {
                         "Accept": "*/*",
-                        "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
+                        "Accept-Language": "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7",
                         "Origin": "https://app.exeos.network",
                         "Referer": "https://app.exeos.network/",
                         "Sec-Fetch-Dest": "empty",
@@ -480,17 +475,17 @@ class Exeos:
                     }
 
                     self.log(
-                        f"{Fore.CYAN + Style.BRIGHT}Account:{Style.RESET_ALL}"
-                        f"{Fore.WHITE + Style.BRIGHT} {self.mask_account(email)} {Style.RESET_ALL}"
+                        f"{Fore.CYAN + Style.BRIGHT}Tài khoản:{Style.RESET_ALL} "
+                        f"{Fore.WHITE + Style.BRIGHT}{self.mask_account(email)}{Style.RESET_ALL}"
                     )
 
                     await self.process_accounts(email, password, option, use_proxy, rotate_proxy)
                     await asyncio.sleep(3)
 
-            self.log(f"{Fore.CYAN + Style.BRIGHT}={Style.RESET_ALL}"*60)
+            self.log(f"{Fore.CYAN + Style.BRIGHT}={Style.RESET_ALL}" * 60)
 
         except Exception as e:
-            self.log(f"{Fore.RED+Style.BRIGHT}Error: {e}{Style.RESET_ALL}")
+            self.log(f"{Fore.RED + Style.BRIGHT}Lỗi: {e}{Style.RESET_ALL}")
             raise e
 
 if __name__ == "__main__":
@@ -499,7 +494,7 @@ if __name__ == "__main__":
         asyncio.run(bot.main())
     except KeyboardInterrupt:
         print(
-            f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
-            f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
-            f"{Fore.RED + Style.BRIGHT}[ EXIT ] Exeos - BOT{Style.RESET_ALL}                                       "                              
+            f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL} "
+            f"{Fore.WHITE + Style.BRIGHT}| {Style.RESET_ALL}"
+            f"{Fore.RED + Style.BRIGHT}[ THOÁT ] Exeos - BOT{Style.RESET_ALL}"
         )
